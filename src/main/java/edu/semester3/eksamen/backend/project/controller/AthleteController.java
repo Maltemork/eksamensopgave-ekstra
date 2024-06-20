@@ -1,9 +1,8 @@
 package edu.semester3.eksamen.backend.project.controller;
 
-import edu.semester3.eksamen.backend.project.dto.BurritoDTO;
-import edu.semester3.eksamen.backend.project.dto.ParticipantDTO;
-import edu.semester3.eksamen.backend.project.model.Burrito;
-import edu.semester3.eksamen.backend.project.service.ParticipantService;
+import edu.semester3.eksamen.backend.project.dto.AthleteDTO;
+import edu.semester3.eksamen.backend.project.model.Athlete;
+import edu.semester3.eksamen.backend.project.service.AthleteService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,23 +16,32 @@ import java.util.List;
 @Getter
 @Setter
 @RestController
-@RequestMapping("/participants")
-public class ParticipantsController {
-    private final ParticipantService participantService;
+@RequestMapping("/athletes")
+public class AthleteController {
+    private final AthleteService athleteService;
 
-    public ParticipantsController(ParticipantService participantService) {
-        this.participantService = participantService;
+    public AthleteController(AthleteService athleteService) {
+        this.athleteService = athleteService;
     }
 
-    @Operation(summary = "Get all participants", description = "Get a list of all participants currently in the database.")
+    @Operation(summary = "Get all athletes", description = "Get a list of all athletes currently in the database.")
     @GetMapping
-    public List<ParticipantDTO> getAllParticipants() {
-        return participantService.getAllParticipants();
+    public List<AthleteDTO> getAllAthletes() {
+        System.out.println("Getting all athletes");
+        return athleteService.getAllAthletes();
     }
 
-    @Operation(summary = "Get participants by id", description = "Get a participant by its id.")
-    @GetMapping("/{id}")
-    public ParticipantDTO getParticipantById(@PathVariable int id) {
-        Burrito foundParticipant = participantService.getById(id);
+    @Operation(summary = "Get athlete by id", description = "Get a athlete by id.")
+    @GetMapping("/find-by-id/{id}")
+    public AthleteDTO getAthleteById(@PathVariable int id) {
+        Athlete foundAthlete = athleteService.getById(id);
+        return new AthleteDTO(foundAthlete.getId(), foundAthlete.getName(), foundAthlete.getGender(), foundAthlete.getClub());
+    }
+
+    @Operation(summary = "Get athlete by name", description = "Get a athlete by name.")
+    @GetMapping("/find-by-name/{name}")
+    public AthleteDTO getAthleteByName(@PathVariable String name) {
+        Athlete foundAthlete = athleteService.getByName(name);
+        return new AthleteDTO(foundAthlete.getId(), foundAthlete.getName(), foundAthlete.getGender(), foundAthlete.getClub());
     }
 }

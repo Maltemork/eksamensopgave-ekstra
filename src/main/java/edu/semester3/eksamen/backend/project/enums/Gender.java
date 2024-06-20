@@ -1,4 +1,4 @@
-package edu.semester3.eksamen.backend.project.model;
+package edu.semester3.eksamen.backend.project.enums;
 
 public enum Gender {
     MALE,

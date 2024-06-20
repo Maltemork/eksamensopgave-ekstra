@@ -1,50 +1,53 @@
 package edu.semester3.eksamen.backend.project.service;
 
-import edu.semester3.eksamen.backend.project.dto.ParticipantDTO;
-import edu.semester3.eksamen.backend.project.model.Participant;
-import edu.semester3.eksamen.backend.project.repository.ParticipantRepository;
+import edu.semester3.eksamen.backend.project.dto.AthleteDTO;
+import edu.semester3.eksamen.backend.project.model.Athlete;
+import edu.semester3.eksamen.backend.project.repository.AthleteRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class ParticipantService {
-    ParticipantRepository participantRepository;
+public class AthleteService {
+    AthleteRepository athleteRepository;
 
-    public ParticipantService(ParticipantRepository participantRepository) {
-        this.participantRepository = participantRepository;
+    public AthleteService(AthleteRepository athleteRepository) {
+        this.athleteRepository = athleteRepository;
     }
 
-    public ResponseEntity createParticipant(ParticipantDTO participantDTO) {
-        Participant newParticipant = new Participant(participantDTO.name(), participantDTO.;
-        participantRepository.save(newParticipant);
-        return new ResponseEntity("Participant created", null, 201);
+    public ResponseEntity createAthlete(AthleteDTO athleteDTO) {
+        Athlete newAthlete = new Athlete(athleteDTO.name(), athleteDTO.gender(),  athleteDTO.club());
+        athleteRepository.save(newAthlete);
+        return new ResponseEntity("Athlete created", null, 201);
     }
-    public ParticipantDTO addParticipant(Participant newParticipant) {
-        participantRepository.save(newParticipant);
-        return new ParticipantDTO(newParticipant.getId(), newParticipant.getName(), newParticipant.getClub(), newParticipant.getGender());
-    }
-
-    public ResponseEntity deleteParticipant(int id) {
-        participantRepository.deleteById(id);
-        return new ResponseEntity("Participant deleted", null, 200);
+    public AthleteDTO addAthlete(Athlete newAthlete) {
+        athleteRepository.save(newAthlete);
+        return new AthleteDTO(newAthlete.getId(), newAthlete.getName(), newAthlete.getGender(), newAthlete.getClub());
     }
 
-    public ParticipantDTO updateParticipant(Participant participant) {
-        participantRepository.save(participant);
-        return participantRepository.findById(Math.toIntExact(participant.getId())).map(b -> new ParticipantDTO(b.getId(), b.getName(), b.getClub(), b.getGender())).orElse(null);
+    public ResponseEntity deleteAthlete(int id) {
+        athleteRepository.deleteById(id);
+        return new ResponseEntity("Athlete successfully removed.", null, 200);
     }
 
-    public Participant getById(int id) {
-        return participantRepository.findById(id).orElse(null);
+    public AthleteDTO updateAthlete(Athlete athlete) {
+        athleteRepository.save(athlete);
+        return athleteRepository.findById(athlete.getId()).map(b -> new AthleteDTO(b.getId(), b.getName(), b.getGender(), b.getClub())).orElse(null);
     }
 
-    public Participant getByName(String name) {
-        return participantRepository.findByName(name);
+    public Athlete getById(int id) {
+        return athleteRepository.findById(id).orElse(null);
     }
 
-    public List<ParticipantDTO> getAllParticipants() {
-        return participantRepository.findAll().stream().map(b -> new ParticipantDTO(b.getId(), b.getName(), b.getDescription(), b.getPrice(), b.getIngredients(), b.getImage())).toList();
+    public Athlete getByName(String name) {
+        return athleteRepository.findByName(name);
+    }
+
+    public List<AthleteDTO> getAllAthletes() {
+        System.out.println("AthleteService has received the request to get all athletes.");
+        List<Athlete> athletes = athleteRepository.findAll();
+        System.out.println(athletes);
+        return athletes.stream().map(b -> new AthleteDTO(b.getId(), b.getName(), b.getGender(), b.getClub())).toList();
     }
 }

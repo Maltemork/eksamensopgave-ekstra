@@ -1,7 +1,12 @@
 package edu.semester3.eksamen.backend.project.repository;
-import edu.semester3.eksamen.backend.project.model.Participant;
+import edu.semester3.eksamen.backend.project.model.Athlete;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ParticipantRepository extends JpaRepository<Participant, Integer> {
-    Participant findByName(String name);
+import java.util.List;
+
+public interface AthleteRepository extends JpaRepository<Athlete, Integer> {
+
+    @Override
+    List<Athlete> findAll();
+    Athlete findByName(String name);
 }
