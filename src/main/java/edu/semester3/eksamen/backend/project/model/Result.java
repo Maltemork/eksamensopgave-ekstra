@@ -2,12 +2,15 @@ package edu.semester3.eksamen.backend.project.model;
 
 
 import edu.semester3.eksamen.backend.project.dto.ResultDTO;
+import edu.semester3.eksamen.backend.project.dto.ResultWithDisciplineIntegerDTO;
 import edu.semester3.eksamen.backend.project.enums.ResultTypes;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Setter
@@ -20,9 +23,11 @@ public class Result {
     private int id;
 
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Athlete athlete;
 
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Discipline discipline;
 
     private double result;
@@ -47,9 +52,20 @@ public class Result {
     }
 
     public Result(ResultDTO resultDTO) {
-        this.id = resultDTO.id();
         this.athlete = resultDTO.athlete();
         this.discipline = resultDTO.discipline();
+        this.result = resultDTO.result();
+        this.resultType = resultDTO.resultType();
+        this.date = resultDTO.date();
+        this.location = resultDTO.location();
+        this.competition = resultDTO.competition();
+        this.placement = resultDTO.placement();
+        this.comment = resultDTO.comment();
+    }
+
+    public Result(ResultWithDisciplineIntegerDTO resultDTO, Discipline discipline) {
+        this.athlete = resultDTO.athlete();
+        this.discipline = discipline;
         this.result = resultDTO.result();
         this.resultType = resultDTO.resultType();
         this.date = resultDTO.date();

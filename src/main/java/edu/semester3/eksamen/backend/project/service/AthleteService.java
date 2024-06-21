@@ -1,6 +1,7 @@
 package edu.semester3.eksamen.backend.project.service;
 
 import edu.semester3.eksamen.backend.project.dto.AthleteDTO;
+import edu.semester3.eksamen.backend.project.dto.ResultDTO;
 import edu.semester3.eksamen.backend.project.model.Athlete;
 import edu.semester3.eksamen.backend.project.model.Result;
 import edu.semester3.eksamen.backend.project.repository.AthleteRepository;
@@ -18,6 +19,10 @@ public class AthleteService {
     public AthleteService(AthleteRepository athleteRepository, ResultRepository resultRepository) {
         this.athleteRepository = athleteRepository;
         this.resultRepository = resultRepository;
+    }
+
+    public void deleteResultsByAthleteId(int id) {
+        resultRepository.deleteAllByAthleteId(id);
     }
 
     public ResponseEntity createAthlete(AthleteDTO athleteDTO) {
@@ -65,15 +70,40 @@ public class AthleteService {
     }
 
     public void addResult(Result result) {
-        resultRepository.save(result);
+        if (result.getAthlete() != null) {
+            resultRepository.save(result);
+        } else {
+            throw new IllegalArgumentException("Athlete must be set to the result before saving.");
+        }
     }
 
     public void deleteResult(int id) {
         resultRepository.deleteById(id);
     }
 
-    public void updateResult(Result result) {
+    public void updateResult(int resultId, ResultDTO newResult) {
+        Result result = resultRepository.findById(resultId).orElse(null);
+        if (result == null) {
+            throw new IllegalArgumentException("Result not found.");
+        }
+        result.setDiscipline(newResult.discipline());
+        result.setResult(newResult.result());
+        result.setResultType(newResult.resultType());
+        result.setDate(newResult.date());
+        result.setLocation(newResult.location());
+        result.setCompetition(newResult.competition());
+        result.setPlacement(newResult.placement());
+        result.setComment(newResult.comment());
+
         resultRepository.save(result);
+    }
+
+    public Result getResultById(int id) {
+        return resultRepository.findById(id).orElse(null);
+    }
+
+    public List<Result> getAllResults() {
+        return resultRepository.findAll();
     }
 
 }

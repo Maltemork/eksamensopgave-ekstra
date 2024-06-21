@@ -28,6 +28,13 @@ public class DisciplineController {
         return disciplineService.getAllDisciplines();
     }
 
+    @Operation(summary = "Get specific discipline", description = "Get a specific discipline.")
+    @GetMapping("/{id}")
+    public DisciplineDTO getDiscipline(@PathVariable int id) {
+        Discipline foundDiscipline = disciplineService.getById(id);
+        return new DisciplineDTO(foundDiscipline.getId(), foundDiscipline.getName(), foundDiscipline.getDescription());
+    }
+
     @Operation(summary = "Get discipline by id", description = "Get a discipline by its id.")
     @GetMapping("/find-by-id/{id}")
     public DisciplineDTO getDisciplineById(@PathVariable int id) {

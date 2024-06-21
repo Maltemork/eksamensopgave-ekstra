@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 @Component
@@ -69,27 +70,33 @@ public class InitData implements CommandLineRunner {
         Discipline kuglestod = disciplineRepository.findByNameIgnoreCase("Kuglestød");
         Discipline laengdespring = disciplineRepository.findByNameIgnoreCase("Længdespring");
 
-        athleteRepository.save(new Athlete("John Doe", Gender.MALE, "M", Set.of(sprint100m, hojdespring)));
-        athleteRepository.save(new Athlete("Jane Doe", Gender.FEMALE, "F", Set.of(kuglestod, laengdespring)));
-        athleteRepository.save(new Athlete("Hans Hansen", Gender.MALE, "M", Set.of(kuglestod, hojdespring)));
-        athleteRepository.save(new Athlete("Hanne Hansen", Gender.FEMALE, "F", Set.of(sprint100m, laengdespring)));
-        athleteRepository.save(new Athlete("Peter Petersen", Gender.MALE, "Tølløse", Set.of(disciplines.get((int) (Math.random()*disciplines.size())), disciplines.get((int) (Math.random()*disciplines.size())))));
+        Random random = new Random();
 
         String[] firstNames = {"Michael", "Usain", "Carl", "Jesse", "Mo", "Haile", "Paula", "Florence", "Fanny", "Allyson", "Marie-José", "Sanya", "Shelly-Ann", "Cathy", "Wilma", "Betty", "Gail", "Elaine", "Dawn", "Sally"};
         String[] lastNames = {"Johnson", "Bolt", "Lewis", "Owens", "Farah", "Gebrselassie", "Radcliffe", "Griffith-Joyner", "Blankers-Koen", "Felix", "Pérec", "Richards-Ross", "Fraser-Pryce", "Freeman", "Rudolph", "Cuthbert", "Devers", "Thompson", "Harper-Nelson", "Pearson"};
 
         for (int i = 0; i < 120; i++) {
             String name = firstNames[(int) (Math.random()*firstNames.length)] + " " + lastNames[(int) (Math.random()*lastNames.length)];
-            Gender gender = i % 2 == 0 ? Gender.MALE : Gender.FEMALE;
+            Gender gender;
+            switch (i % 3) {
+                case 0:
+                    gender = Gender.MALE;
+                    break;
+                case 1:
+                    gender = Gender.FEMALE;
+                    break;
+                default:
+                    gender = Gender.OTHER;
+                    break;
+            }
             String club = i % 2 == 0 ? "M" : "F";
             Set<Discipline> athleteDisciplines = new HashSet<>();
             while (athleteDisciplines.size() < 2) {
                 athleteDisciplines.add(disciplines.get((int) (Math.random()*disciplines.size())));
             }
-            athleteRepository.save(new Athlete(name, gender, club, athleteDisciplines));
+            int age = 5 + random.nextInt(95); // Generate a random age between 5 and 99
+            athleteRepository.save(new Athlete(name, gender, age, club, athleteDisciplines));
         }
-
-
     }
 
     private void createResults() {
