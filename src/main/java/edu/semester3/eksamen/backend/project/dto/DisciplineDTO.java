@@ -8,6 +8,9 @@ public record DisciplineDTO(Integer id, String name, String description) {
             this(id, name, null);
         }
 
+        public DisciplineDTO(String name, String description) {
+            this(null, name, description);
+        }
         public DisciplineDTO(Discipline discipline) {
             this(discipline.getId(), discipline.getName(), discipline.getDescription());
         }

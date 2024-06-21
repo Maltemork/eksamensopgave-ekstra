@@ -139,12 +139,12 @@ public class AthleteController {
     @Operation(summary = "Get all results", description = "Get a list of all results currently in the database.")
     @GetMapping("/results")
     public ResponseEntity<List<ResultDTO>> getAllResults() {
-        List<Result> foundResults = athleteService.getAllResults();
-        if (foundResults.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        } else {
+        try {
+            List<Result> foundResults = athleteService.getAllResults();
             List<ResultDTO> resultDTOs = foundResults.stream().map(ResultDTO::new).toList();
             return ResponseEntity.ok(resultDTOs);
+        } catch(Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
