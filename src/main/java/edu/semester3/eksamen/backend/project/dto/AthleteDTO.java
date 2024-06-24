@@ -21,6 +21,7 @@ public record AthleteDTO(
         String postalCode,
         String comment,
         Set<Discipline> disciplines) {
+
     public AthleteDTO(
             Integer id,
             String name,
